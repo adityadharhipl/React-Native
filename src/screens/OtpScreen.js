@@ -1,61 +1,238 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+// import {
+//   Pressable,
+//   SafeAreaView,
+//   StatusBar,
+//   StyleSheet,
+//   Text,
+//   TextInput,
+//   View,
+// } from 'react-native';
+
+// import { colors } from '../theme/colors';
+
+// export default function OtpScreen({ navigation }) {
+//   const [otp, setOtp] = useState('');
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <StatusBar barStyle="light-content" backgroundColor={colors.background} />
+//       <View style={styles.topBar}>
+//         <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
+//           <Text style={styles.backText}>{'<'}</Text>
+//         </Pressable>
+//         <Text style={styles.brand}>Solfana</Text>
+//       </View>
+
+//       <View style={styles.content}>
+//         <Text style={styles.title}>Enter OTP</Text>
+//         <Text style={styles.subtitle}>We sent a 4-digit code to your email address.</Text>
+
+//         <View style={styles.otpRow}>
+//           {Array.from({ length: 4 }).map((_, index) => (
+//             <View key={index} style={styles.otpBox}>
+//               <Text style={styles.otpDigit}>{otp[index] || ''}</Text>
+//             </View>
+//           ))}
+//         </View>
+
+//         <TextInput
+//           value={otp}
+//           onChangeText={text => setOtp(text.replace(/[^0-9]/g, '').slice(0, 4))}
+//           keyboardType="number-pad"
+//           maxLength={4}
+//           style={styles.hiddenInput}
+//         />
+
+//         <View style={styles.rowLinks}>
+//           <Text style={styles.helper}>Didn't receive a code?</Text>
+//           <Pressable>
+//             <Text style={styles.link}>Resend Code</Text>
+//           </Pressable>
+//         </View>
+
+//         <Pressable
+//           onPress={() => navigation.navigate('PasswordLogin')}
+//           style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}
+//         >
+//           <Text style={styles.primaryText}>Verify</Text>
+//         </Pressable>
+//       </View>
+//     </SafeAreaView>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 18 },
+//   topBar: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     paddingTop: 8,
+//     marginBottom: 24,
+//   },
+//   backButton: {
+//     width: 28,
+//     height: 28,
+//     borderRadius: 14,
+//     borderWidth: 1,
+//     borderColor: 'rgba(255,255,255,0.14)',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     marginRight: 12,
+//   },
+//   backText: { color: colors.white, fontSize: 18, marginTop: -2 },
+//   brand: { color: colors.primary, fontSize: 16, fontWeight: '800' },
+//   content: { flex: 1, justifyContent: 'center' },
+//   title: { color: colors.white, fontSize: 28, fontWeight: '800' },
+//   subtitle: { color: colors.textGray, marginTop: 10, marginBottom: 22, lineHeight: 20 },
+//   otpRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 },
+//   otpBox: {
+//     width: 48,
+//     height: 54,
+//     borderRadius: 14,
+//     borderWidth: 1,
+//     borderColor: '#232332',
+//     backgroundColor: colors.cardBg,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   otpDigit: { color: colors.white, fontSize: 18, fontWeight: '700' },
+//   hiddenInput: {
+//     position: 'absolute',
+//     opacity: 0,
+//     width: 1,
+//     height: 1,
+//   },
+//   rowLinks: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     marginBottom: 20,
+//   },
+//   helper: { color: colors.textGray, fontSize: 12 },
+//   link: { color: colors.primary, fontSize: 12, fontWeight: '700' },
+//   primaryButton: {
+//     height: 48,
+//     borderRadius: 24,
+//     backgroundColor: '#ef49d8',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   primaryText: { color: colors.white, fontWeight: '700', fontSize: 15 },
+//   buttonPressed: { opacity: 0.92 },
+// });
+
+import React, { useRef, useState } from 'react';
 import {
-  Pressable,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
   View,
+  Pressable,
 } from 'react-native';
-
-import { colors } from '../theme/colors';
 
 export default function OtpScreen({ navigation }) {
   const [otp, setOtp] = useState('');
+  const inputRef = useRef(null);
+
+  const handleOtpChange = value => {
+    const formatted = value.replace(/[^0-9]/g, '').slice(0, 4);
+    setOtp(formatted);
+  };
+
+  const handleVerify = () => {
+    if (otp.length !== 4) {
+      alert('Please enter a valid 4-digit OTP');
+      return;
+    }
+
+    navigation.navigate('PasswordLogin');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.background} />
-      <View style={styles.topBar}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backText}>{'<'}</Text>
+      <StatusBar barStyle="light-content" backgroundColor="#09090F" />
+
+      {/* Header */}
+      <View style={styles.header}>
+        <Pressable
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backIcon}>←</Text>
         </Pressable>
-        <Text style={styles.brand}>Solfana</Text>
+
+        <Text style={styles.logo}>Solfana</Text>
       </View>
 
+      {/* Content */}
       <View style={styles.content}>
-        <Text style={styles.title}>Enter OTP</Text>
-        <Text style={styles.subtitle}>We sent a 4-digit code to your email address.</Text>
+        <Text style={styles.title}>Verification Code</Text>
 
-        <View style={styles.otpRow}>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <View key={index} style={styles.otpBox}>
-              <Text style={styles.otpDigit}>{otp[index] || ''}</Text>
-            </View>
-          ))}
-        </View>
+        <Text style={styles.subtitle}>
+          Enter the 4-digit verification code sent to your email address.
+        </Text>
 
+        {/* OTP Boxes */}
+        <Pressable
+          onPress={() => inputRef.current?.focus()}
+          style={styles.otpContainer}
+        >
+          {[0, 1, 2, 3].map(index => {
+            const digit = otp[index] || '';
+            const active = otp.length === index;
+
+            return (
+              <View
+                key={index}
+                style={[
+                  styles.otpBox,
+                  active && styles.otpBoxActive,
+                ]}
+              >
+                <Text style={styles.otpText}>{digit}</Text>
+              </View>
+            );
+          })}
+        </Pressable>
+
+        {/* Hidden Input */}
         <TextInput
-          value={otp}
-          onChangeText={text => setOtp(text.replace(/[^0-9]/g, '').slice(0, 4))}
+          ref={inputRef}
+          autoFocus
           keyboardType="number-pad"
           maxLength={4}
+          value={otp}
+          onChangeText={handleOtpChange}
           style={styles.hiddenInput}
+          caretHidden
         />
 
-        <View style={styles.rowLinks}>
-          <Text style={styles.helper}>Didn't receive a code?</Text>
+        {/* Resend */}
+        <View style={styles.resendRow}>
+          <Text style={styles.resendText}>
+            Didn't receive the code?
+          </Text>
+
           <Pressable>
-            <Text style={styles.link}>Resend Code</Text>
+            <Text style={styles.resendButton}>
+              Resend
+            </Text>
           </Pressable>
         </View>
 
+        {/* Verify Button */}
         <Pressable
-          onPress={() => navigation.navigate('PasswordLogin')}
-          style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}
+          style={({ pressed }) => [
+            styles.verifyButton,
+            pressed && { opacity: 0.85 },
+          ]}
+          onPress={handleVerify}
         >
-          <Text style={styles.primaryText}>Verify</Text>
+          <Text style={styles.verifyText}>
+            Verify OTP
+          </Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -63,60 +240,120 @@ export default function OtpScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 18 },
-  topBar: {
+  container: {
+    flex: 1,
+    backgroundColor: '#09090F',
+    paddingHorizontal: 24,
+  },
+
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 8,
-    marginBottom: 24,
+    marginTop: 10,
   },
+
   backButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.14)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#171721',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
   },
-  backText: { color: colors.white, fontSize: 18, marginTop: -2 },
-  brand: { color: colors.primary, fontSize: 16, fontWeight: '800' },
-  content: { flex: 1, justifyContent: 'center' },
-  title: { color: colors.white, fontSize: 28, fontWeight: '800' },
-  subtitle: { color: colors.textGray, marginTop: 10, marginBottom: 22, lineHeight: 20 },
-  otpRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 },
+
+  backIcon: {
+    color: '#fff',
+    fontSize: 20,
+  },
+
+  logo: {
+    color: '#F24FD9',
+    fontSize: 18,
+    fontWeight: '700',
+    marginLeft: 15,
+  },
+
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+
+  title: {
+    color: '#fff',
+    fontSize: 32,
+    fontWeight: '800',
+    marginBottom: 10,
+  },
+
+  subtitle: {
+    color: '#A1A1AA',
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 40,
+  },
+
+  otpContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 25,
+  },
+
   otpBox: {
-    width: 48,
-    height: 54,
-    borderRadius: 14,
+    width: 70,
+    height: 70,
+    borderRadius: 18,
+    backgroundColor: '#171721',
     borderWidth: 1,
-    borderColor: '#232332',
-    backgroundColor: colors.cardBg,
-    alignItems: 'center',
+    borderColor: '#2A2A36',
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  otpDigit: { color: colors.white, fontSize: 18, fontWeight: '700' },
+
+  otpBoxActive: {
+    borderColor: '#F24FD9',
+  },
+
+  otpText: {
+    color: '#fff',
+    fontSize: 28,
+    fontWeight: '700',
+  },
+
   hiddenInput: {
     position: 'absolute',
     opacity: 0,
     width: 1,
     height: 1,
   },
-  rowLinks: {
+
+  resendRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 30,
   },
-  helper: { color: colors.textGray, fontSize: 12 },
-  link: { color: colors.primary, fontSize: 12, fontWeight: '700' },
-  primaryButton: {
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#ef49d8',
-    alignItems: 'center',
+
+  resendText: {
+    color: '#A1A1AA',
+    fontSize: 14,
+  },
+
+  resendButton: {
+    color: '#F24FD9',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+
+  verifyButton: {
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: '#F24FD9',
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  primaryText: { color: colors.white, fontWeight: '700', fontSize: 15 },
-  buttonPressed: { opacity: 0.92 },
+
+  verifyText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
 });

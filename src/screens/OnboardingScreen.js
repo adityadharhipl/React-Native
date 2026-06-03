@@ -8,17 +8,16 @@ import {
   Text,
   View,
 } from 'react-native';
-
+const bgImage = require('../assets/image/img1.png');
+const bgImage1 = require('../assets/image/button.png');
 export default function OnboardingScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#050505" />
-      <ImageBackground
-        source={{
-          uri: 'https://images.unsplash.com/photo-1611003228640-4f8c1b7d7f9a?auto=format&fit=crop&w=900&q=80',
-        }}
-        style={styles.background}
+       <ImageBackground
+        source={bgImage}
         resizeMode="cover"
+        style={styles.background}
       >
         <View style={styles.overlayTop} />
         <View style={styles.overlayBottom} />
@@ -155,8 +154,8 @@ const styles = StyleSheet.create({
   },
   nextText: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: '400',
-    marginTop: -2,
+    marginTop: -6,
   },
 });

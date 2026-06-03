@@ -61,7 +61,7 @@ export default function PasswordLoginScreen({ navigation }) {
         </View>
 
         <View style={styles.rowLinks}>
-          <Text style={styles.helper}>Forgot password?</Text>
+          {/* <Text style={styles.helper}>Forgot password?</Text> */}
           <Pressable onPress={() => navigation.navigate('ResetPassword')}>
             <Text style={styles.link}>Forgot Password?</Text>
           </Pressable>
