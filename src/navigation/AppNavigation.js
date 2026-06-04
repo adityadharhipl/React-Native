@@ -13,8 +13,8 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator 
-        initialRouteName="Splash" 
+      <Stack.Navigator
+        initialRouteName="Splash"
         screenOptions={{ headerShown: false, animation: 'fade' }}
       >
         <Stack.Screen name="Splash" component={SplashScreen} />
@@ -22,6 +22,10 @@ export default function AppNavigation() {
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="OnboardingExplore" component={OnboardingExploreScreen} />
         <Stack.Screen name="OnboardingStart" component={OnboardingStartScreen} />
+        <Stack.Screen
+          name="InterestCategory"
+          component={InterestCategoryScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

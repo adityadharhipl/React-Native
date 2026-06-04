@@ -1,126 +1,3 @@
-// import React, { useState } from 'react';
-// import {
-//   Pressable,
-//   SafeAreaView,
-//   StatusBar,
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   View,
-// } from 'react-native';
-
-// import { colors } from '../theme/colors';
-
-// export default function OtpScreen({ navigation }) {
-//   const [otp, setOtp] = useState('');
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <StatusBar barStyle="light-content" backgroundColor={colors.background} />
-//       <View style={styles.topBar}>
-//         <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
-//           <Text style={styles.backText}>{'<'}</Text>
-//         </Pressable>
-//         <Text style={styles.brand}>Solfana</Text>
-//       </View>
-
-//       <View style={styles.content}>
-//         <Text style={styles.title}>Enter OTP</Text>
-//         <Text style={styles.subtitle}>We sent a 4-digit code to your email address.</Text>
-
-//         <View style={styles.otpRow}>
-//           {Array.from({ length: 4 }).map((_, index) => (
-//             <View key={index} style={styles.otpBox}>
-//               <Text style={styles.otpDigit}>{otp[index] || ''}</Text>
-//             </View>
-//           ))}
-//         </View>
-
-//         <TextInput
-//           value={otp}
-//           onChangeText={text => setOtp(text.replace(/[^0-9]/g, '').slice(0, 4))}
-//           keyboardType="number-pad"
-//           maxLength={4}
-//           style={styles.hiddenInput}
-//         />
-
-//         <View style={styles.rowLinks}>
-//           <Text style={styles.helper}>Didn't receive a code?</Text>
-//           <Pressable>
-//             <Text style={styles.link}>Resend Code</Text>
-//           </Pressable>
-//         </View>
-
-//         <Pressable
-//           onPress={() => navigation.navigate('PasswordLogin')}
-//           style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}
-//         >
-//           <Text style={styles.primaryText}>Verify</Text>
-//         </Pressable>
-//       </View>
-//     </SafeAreaView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 18 },
-//   topBar: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     paddingTop: 8,
-//     marginBottom: 24,
-//   },
-//   backButton: {
-//     width: 28,
-//     height: 28,
-//     borderRadius: 14,
-//     borderWidth: 1,
-//     borderColor: 'rgba(255,255,255,0.14)',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginRight: 12,
-//   },
-//   backText: { color: colors.white, fontSize: 18, marginTop: -2 },
-//   brand: { color: colors.primary, fontSize: 16, fontWeight: '800' },
-//   content: { flex: 1, justifyContent: 'center' },
-//   title: { color: colors.white, fontSize: 28, fontWeight: '800' },
-//   subtitle: { color: colors.textGray, marginTop: 10, marginBottom: 22, lineHeight: 20 },
-//   otpRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 },
-//   otpBox: {
-//     width: 48,
-//     height: 54,
-//     borderRadius: 14,
-//     borderWidth: 1,
-//     borderColor: '#232332',
-//     backgroundColor: colors.cardBg,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   otpDigit: { color: colors.white, fontSize: 18, fontWeight: '700' },
-//   hiddenInput: {
-//     position: 'absolute',
-//     opacity: 0,
-//     width: 1,
-//     height: 1,
-//   },
-//   rowLinks: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     marginBottom: 20,
-//   },
-//   helper: { color: colors.textGray, fontSize: 12 },
-//   link: { color: colors.primary, fontSize: 12, fontWeight: '700' },
-//   primaryButton: {
-//     height: 48,
-//     borderRadius: 24,
-//     backgroundColor: '#ef49d8',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   primaryText: { color: colors.white, fontWeight: '700', fontSize: 15 },
-//   buttonPressed: { opacity: 0.92 },
-// });
-
 import React, { useRef, useState } from 'react';
 import {
   SafeAreaView,
@@ -130,10 +7,15 @@ import {
   TextInput,
   View,
   Pressable,
+  Modal,
 } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
 
 export default function OtpScreen({ navigation }) {
+  // const navigation = useNavigation();
   const [otp, setOtp] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const inputRef = useRef(null);
 
   const handleOtpChange = value => {
@@ -147,95 +29,136 @@ export default function OtpScreen({ navigation }) {
       return;
     }
 
-    navigation.navigate('PasswordLogin');
+    // navigation.navigate('PasswordLogin');
+    setShowSuccessModal(true);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#09090F" />
+    <>
+      <Modal
+        visible={showSuccessModal}
+        transparent
+        animationType="fade"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
 
-      {/* Header */}
-      <View style={styles.header}>
-        <Pressable
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backIcon}>←</Text>
-        </Pressable>
+            <Text style={styles.checkIcon}>✓</Text>
 
-        <Text style={styles.logo}>Solfana</Text>
-      </View>
+            <Text style={styles.modalTitle}>
+              Registered Successfully
+            </Text>
 
-      {/* Content */}
-      <View style={styles.content}>
-        <Text style={styles.title}>Verification Code</Text>
+            <Text style={styles.modalDescription}>
+              Your registration was successful! Welcome aboard
+              and enjoy the app.
+            </Text>
 
-        <Text style={styles.subtitle}>
-          Enter the 4-digit verification code sent to your email address.
-        </Text>
+            <Pressable
+              style={styles.doneButton}
+              onPress={() => {
+                setShowSuccessModal(false);
 
-        {/* OTP Boxes */}
-        <Pressable
-          onPress={() => inputRef.current?.focus()}
-          style={styles.otpContainer}
-        >
-          {[0, 1, 2, 3].map(index => {
-            const digit = otp[index] || '';
-            const active = otp.length === index;
+                // Navigate to next screen
+                setTimeout(() => {
+                  navigation.navigate('InterestCategory');
+                }, 200);
+              }}
+            >
+              <Text style={styles.doneButtonText}>Done</Text>
+            </Pressable>
 
-            return (
-              <View
-                key={index}
-                style={[
-                  styles.otpBox,
-                  active && styles.otpBoxActive,
-                ]}
-              >
-                <Text style={styles.otpText}>{digit}</Text>
-              </View>
-            );
-          })}
-        </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#09090F" />
 
-        {/* Hidden Input */}
-        <TextInput
-          ref={inputRef}
-          autoFocus
-          keyboardType="number-pad"
-          maxLength={4}
-          value={otp}
-          onChangeText={handleOtpChange}
-          style={styles.hiddenInput}
-          caretHidden
-        />
+        {/* Header */}
+        <View style={styles.header}>
+          <Pressable
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.backIcon}>←</Text>
+          </Pressable>
 
-        {/* Resend */}
-        <View style={styles.resendRow}>
-          <Text style={styles.resendText}>
-            Didn't receive the code?
+          <Text style={styles.logo}>Solfana</Text>
+        </View>
+
+        {/* Content */}
+        <View style={styles.content}>
+          <Text style={styles.title}>Verification Code</Text>
+
+          <Text style={styles.subtitle}>
+            Enter the 4-digit verification code sent to your email address.
           </Text>
 
-          <Pressable>
-            <Text style={styles.resendButton}>
-              Resend
+          {/* OTP Boxes */}
+          <Pressable
+            onPress={() => inputRef.current?.focus()}
+            style={styles.otpContainer}
+          >
+            {[0, 1, 2, 3].map(index => {
+              const digit = otp[index] || '';
+              const active = otp.length === index;
+
+              return (
+                <View
+                  key={index}
+                  style={[
+                    styles.otpBox,
+                    active && styles.otpBoxActive,
+                  ]}
+                >
+                  <Text style={styles.otpText}>{digit}</Text>
+                </View>
+              );
+            })}
+          </Pressable>
+
+          {/* Hidden Input */}
+          <TextInput
+            ref={inputRef}
+            autoFocus
+            keyboardType="number-pad"
+            maxLength={4}
+            value={otp}
+            onChangeText={handleOtpChange}
+            style={styles.hiddenInput}
+            caretHidden
+          />
+
+          {/* Resend */}
+          <View style={styles.resendRow}>
+            <Text style={styles.resendText}>
+              Didn't receive the code?
+            </Text>
+
+            <Pressable>
+              <Text style={styles.resendButton}>
+                Resend
+              </Text>
+            </Pressable>
+          </View>
+
+          {/* Verify Button */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.verifyButton,
+              pressed && { opacity: 0.85 },
+            ]}
+            onPress={handleVerify}
+          >
+            <Text style={styles.verifyText}>
+              Verify OTP
             </Text>
           </Pressable>
         </View>
+      </SafeAreaView>
 
-        {/* Verify Button */}
-        <Pressable
-          style={({ pressed }) => [
-            styles.verifyButton,
-            pressed && { opacity: 0.85 },
-          ]}
-          onPress={handleVerify}
-        >
-          <Text style={styles.verifyText}>
-            Verify OTP
-          </Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+    </>
+
   );
 }
 
@@ -355,5 +278,60 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  modalContainer: {
+    width: '85%',
+    backgroundColor: '#1A1029',
+    borderRadius: 28,
+    padding: 25,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+
+  checkIcon: {
+    fontSize: 70,
+    color: '#D100FF',
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+
+  modalTitle: {
+    color: '#FFFFFF',
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+
+  modalDescription: {
+    color: '#D1D1D1',
+    textAlign: 'center',
+    fontSize: 15,
+    lineHeight: 24,
+    marginBottom: 25,
+  },
+
+  doneButton: {
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  doneButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
